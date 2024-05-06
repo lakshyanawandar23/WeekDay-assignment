@@ -22,30 +22,23 @@ const useStyles = makeStyles({
          // Light green color
         color: '##7CFC00',
       },
+      cardHover: {
+        transition: 'transform 0.3s',
+        '&:hover': {
+          transform: 'scale(1.05)',
+        },
+      },
   });
 const JobList = (Data) => {
     const classes=useStyles()
    const jobData=Data;
-    // useEffect(() => {
-    //     const requestOptions = {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         // Add any necessary body data here, if required by the API
-    //       };
-    //   // Fetch the JSON data from the API endpoint
-    //   fetch('https://api.weekday.technology/adhoc/getSampleJdJSON',requestOptions)
-    //     .then(response => response.json())
-    //     .then(data => {
-    //       // Once data is fetched, set it to the state
-    //       setJobData(data);
-    //     })
-    //     .catch(error => console.error('Error fetching data:', error));
-    // }, []);
-  // console.log(jobData)
+  const addEllipsis = (str, limit) => {
+    return str.length > limit ? str.substring(0, limit) + '...' : str;
+} 
     return (
       <div>
       {jobData&&
-        <Card  sx={{ maxWidth: 345}} style={{maxHeight:600}} >
+        <Card  sx={{ maxWidth: 345}} style={{maxHeight:600}} className={classes.cardHover} >
           <CardContent>
           <div className={classes.container}>
           <Avatar
@@ -69,25 +62,20 @@ const JobList = (Data) => {
             </div>
         </div>
             <Typography variant="body2" >
-              {jobData.jdList&&jobData.jdList.jobDetailsFromCompany}
+              {jobData.jdList&&addEllipsis(jobData.jdList.jobDetailsFromCompany,200)}
             </Typography>
             <CardActions >
                 <Button size="small" style={{marginLeft:"80px"}}>View Job</Button>
             </CardActions>
-            <div>
+            <div style={{marginBottom:"2px"}}>
             <Typography color="textSecondary">
            Minimum Experience:
-           <div>{jobData.jdList&&jobData.jdList.minExp+" years"}</div> 
+           <div>{jobData.jdList&&jobData.jdList.minExp!=null?jobData.jdList.minExp+" years":"0 years"}</div> 
             </Typography>
             </div>
-            <div style={{color:"green"}}>
-            <IconButton color='success'>
-              <FlashOn/>
-              </IconButton>
-            <Button  >
+            <Button style={{backgroundColor:"#55efc4",color:"white"}} size='large'  fullWidth={true}>
               Easy Apply
             </Button>
-            </div>
           </CardContent>
         </Card>
       }

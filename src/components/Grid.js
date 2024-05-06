@@ -45,7 +45,7 @@ const handleFilterChange = (filterKey, value) => {
 };
   return (
     <div >
-    <Grid container spacing={3} style={{marginBottom:"10px",marginTop:"10px",marginLeft:"5px"}} >
+    <Grid container spacing={3} style={{marginBottom:"10px",marginTop:"10px",marginLeft:"10px"}} >
         <Grid item xs={12} >
           <TextField
             label="Role"
@@ -69,7 +69,7 @@ const handleFilterChange = (filterKey, value) => {
           />
         </Grid>
         </Grid>
-    <Grid container spacing={3}>
+    <Grid container spacing={3} style={{marginLeft:"5px"}}>
     {filteredJobData ?
     filteredJobData&&filteredJobData.map((jobData, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import  Grid  from '@mui/material/Grid';
 import  TextField  from '@mui/material/TextField';
 import JobList from './JobList'; // assuming your SampleCard component is in a separate file
-
+import { Button } from '@mui/material';
 const SampleCardList = () => {
   const [jobData, setJobData] = useState([]);
   const [filters, setFilters] = useState({
@@ -11,6 +11,8 @@ const SampleCardList = () => {
     location: '',
     minExp:'',
   });
+  const [numItemsToShow, setNumItemsToShow] = useState(6); // Initial number of items to show
+  const observer = useRef();
   useEffect(() => {
     const requestOptions = {
         method: 'POST',
@@ -25,6 +27,24 @@ const SampleCardList = () => {
       setJobData(data);
     })
     .catch(error => console.error('Error fetching data:', error));
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        // If intersection is observed, increase the number of items to show
+        setNumItemsToShow(prevNumItems => prevNumItems + 6);
+      }
+    });
+
+    // Attach observer to the last item
+    if (observer.current) {
+      observer.current.observe(document.querySelector('.observe-intersection'));
+    }
+
+    // Cleanup
+    return () => {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+    };
 }, []);
 const filteredJobData = jobData.jdList&&jobData.jdList.filter(Data => {
   // console.log(Data, filters)
@@ -71,18 +91,26 @@ const handleFilterChange = (filterKey, value) => {
         </Grid>
     <Grid container spacing={3} style={{marginLeft:"5px"}}>
     {filteredJobData ?
-    filteredJobData&&filteredJobData.map((jobData, index) => (
+    filteredJobData&&filteredJobData.slice(0,numItemsToShow).map((jobData, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
             <JobList jdList={jobData} />
           </Grid>
         ))
         :
-      jobData.jdList&&jobData.jdList.map((data, index) => (
+      jobData.jdList&&jobData.jdList.slice(0,numItemsToShow).map((data, index) => (
         <Grid item xs={12} sm={6} md={4} key={index}>
           <JobList jdList={data} />
         </Grid>
       ))
     }
+    <Grid item xs={12} >
+          {numItemsToShow < jobData.jdList?.length && (
+            <Button variant="contained" color="primary"  style={{marginLeft:"12px",alignContent:"center"}} onClick={() => setNumItemsToShow(prevNumItems => prevNumItems + 6)}>
+              Show More
+            </Button>
+          )}
+        </Grid>
+        <div className="observe-intersection" style={{ height: '1px' }} />
     </Grid>
     </div>
   );

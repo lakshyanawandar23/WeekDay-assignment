@@ -19,3 +19,4 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
+![image](https://github.com/lakshyanawandar23/WeekDay-assignment/assets/111570269/5c26183c-f28b-42d4-b354-d97bc2b8edbe)
